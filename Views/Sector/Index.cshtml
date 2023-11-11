@@ -1,0 +1,32 @@
+﻿@{
+    @using PersonalSectorManager.DTO;
+
+    ViewData["Title"] = "Home Page";
+
+}
+
+@model List<SectorDTO>
+<form>
+    <label>Please enter your name and select the sectors you are currently involved in.</label>
+    <br />
+    <br />
+    <label>Name:</label>
+    <input type="text" name="name" required>
+    <br />
+    <br />
+    <label>Sectors:</label>
+    <select name="sectors" id="sectors" multiple size="5" required>
+        @foreach (var item in Model)
+        {
+            <option value="@item.Id" style="margin-left: calc(@item.Level * 15px);">@item.Name</option>
+
+        }
+    </select>
+    <br />
+    <br />
+    <input type="checkbox" id="agree-to-terms" required>
+    <label for="agree-to-terms">Agree to terms</label>
+    <br />
+    <br />
+    <input type="submit" value="Save">
+</form>

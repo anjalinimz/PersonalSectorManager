@@ -1,10 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using PersonalSectorManager.Models;
+using PersonalSectorManager.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<IProfileService, SectorService>();
 
 var configuration = builder.Configuration;
 builder.Services.AddDbContext<PersonalSectorDBContext>(options =>
@@ -31,6 +33,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Sector}/{action=Index}/{id?}");
 
 app.Run();
