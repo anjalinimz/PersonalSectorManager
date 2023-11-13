@@ -1,15 +1,17 @@
 using Microsoft.EntityFrameworkCore;
 using PersonalSectorManager.Models;
 using PersonalSectorManager.Service;
+using PersonalSectorManager.Util;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IProfileService, SectorService>();
+builder.Services.AddScoped<ITransformer, ProfileDataTransformer>();
 
 var configuration = builder.Configuration;
-builder.Services.AddDbContext<PersonalSectorDBContext>(options =>
+builder.Services.AddDbContext<ProfileDBContext>(options =>
 {
     options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
 });

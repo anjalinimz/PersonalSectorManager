@@ -1,11 +1,14 @@
-﻿using System;
-using PersonalSectorManager.DTO;
+﻿using PersonalSectorManager.ViewModels;
 
 namespace PersonalSectorManager.Service
 {
     public interface IProfileService
     {
-        List<SectorDTO> retrieveSectors();
+        FormViewModel RetrieveSectors();
+
+        int SaveUser(UserViewModel userDTO);
+
+        UserViewModel GetUser(int userId);
     }
 }
 

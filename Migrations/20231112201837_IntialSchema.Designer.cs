@@ -11,9 +11,9 @@ using PersonalSectorManager.Models;
 
 namespace PersonalSectorManager.Migrations
 {
-    [DbContext(typeof(PersonalSectorDBContext))]
-    [Migration("20231111162943_AddUser")]
-    partial class AddUser
+    [DbContext(typeof(ProfileDBContext))]
+    [Migration("20231112201837_IntialSchema")]
+    partial class IntialSchema
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,11 +27,11 @@ namespace PersonalSectorManager.Migrations
 
             modelBuilder.Entity("PersonalSectorManager.Models.Sector", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("SectorId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SectorId"));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -43,7 +43,7 @@ namespace PersonalSectorManager.Migrations
                     b.Property<int?>("ParentId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("SectorId");
 
                     b.HasIndex("ParentId");
 
@@ -52,27 +52,45 @@ namespace PersonalSectorManager.Migrations
 
             modelBuilder.Entity("PersonalSectorManager.Models.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"));
 
                     b.Property<bool>("AgreeToTerms")
                         .HasColumnType("bit");
-
-                    b.Property<int>("SectorId")
-                        .HasColumnType("int");
 
                     b.Property<string>("UserName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("UserId");
+
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("PersonalSectorManager.Models.UserSector", b =>
+                {
+                    b.Property<int>("UserSectorId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserSectorId"));
+
+                    b.Property<int>("SectorId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserSectorId");
 
                     b.HasIndex("SectorId");
 
-                    b.ToTable("Users");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserSectors");
                 });
 
             modelBuilder.Entity("PersonalSectorManager.Models.Sector", b =>
@@ -84,20 +102,35 @@ namespace PersonalSectorManager.Migrations
                     b.Navigation("Parent");
                 });
 
-            modelBuilder.Entity("PersonalSectorManager.Models.User", b =>
+            modelBuilder.Entity("PersonalSectorManager.Models.UserSector", b =>
                 {
                     b.HasOne("PersonalSectorManager.Models.Sector", "Sector")
-                        .WithMany()
+                        .WithMany("UserSectors")
                         .HasForeignKey("SectorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("PersonalSectorManager.Models.User", "User")
+                        .WithMany("UserSectors")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Sector");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("PersonalSectorManager.Models.Sector", b =>
                 {
                     b.Navigation("Children");
+
+                    b.Navigation("UserSectors");
+                });
+
+            modelBuilder.Entity("PersonalSectorManager.Models.User", b =>
+                {
+                    b.Navigation("UserSectors");
                 });
 #pragma warning restore 612, 618
         }
