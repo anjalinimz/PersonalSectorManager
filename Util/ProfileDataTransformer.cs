@@ -36,8 +36,29 @@ namespace PersonalSectorManager.Util
 
         public SectorViewModel TransformToSectorViewModel(Sector sector)
         {
-            SectorViewModel sectorViewModel = new(sector.SectorId, sector.Name);
+            SectorViewModel sectorViewModel = new(sector.SectorId, sector.Name)
+            {
+                Level =  GetItemLevel(sector),
+                Disabled = sector.Children.Any()
+            };
+
             return sectorViewModel;
+        }
+
+        private int GetItemLevel(Sector sector)
+        {
+            if (sector == null)
+            {
+                return 0;
+            }
+            else if (sector.ParentId == null)
+            {
+                return 0;
+            }
+            else
+            {
+                return GetItemLevel(sector.Parent) + 1;  // todo Do we need to handle null here. 
+            }
         }
     }
 }

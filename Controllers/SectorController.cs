@@ -36,8 +36,11 @@ namespace PersonalSectorManager.Controllers
                 int userId = _sectorService.SaveUser(formViewModel.UserViewModel);
                 return RedirectToAction("Confirmation", new { userId });
             }
-
-            return View("Error");
+            else
+            {
+                formViewModel.SectorViewModels = _sectorService.RetrieveSectors().SectorViewModels;
+                return View("Index", formViewModel);
+            }
         }
 
         public IActionResult Confirmation(int userId)

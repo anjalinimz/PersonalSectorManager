@@ -25,7 +25,6 @@ namespace PersonalSectorManager.Service
             foreach (var sector in sectors)
             {
                 SectorViewModel  sectorViewModel = _transformer.TransformToSectorViewModel(sector);
-                sectorViewModel.Level = getItemLevel(sector);
 
                 sectorViewModels.Add(sectorViewModel);
             }
@@ -44,7 +43,7 @@ namespace PersonalSectorManager.Service
 
             var selectedSectors = _context.Sectors
                .Where(s => userViewModel.SelectedSectorIds.Contains(s.SectorId)).ToList();  // todo handle null
-
+            
             // Assuming the user is a new user, you may need to attach it to the context.
             // If the user is an existing user, you might not need to attach.
             if (userViewModel.UserId == 0)
@@ -86,17 +85,6 @@ namespace PersonalSectorManager.Service
             // todo handle null/ errors
 
             return userViewModel;
-        }
-
-        private int getItemLevel(Sector sector)
-        {
-            if (sector.ParentId == null)
-            {
-                return 1;
-            } else
-            {
-                return getItemLevel(sector.Parent) + 1;  // todo Do we need to handle null here. 
-            }
         }
     }
 }
