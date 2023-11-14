@@ -1,9 +1,8 @@
-﻿@using PersonalSectorManager.ViewModels
-@model UserViewModel
+﻿@model UserViewModel
 
 <h3>Profile submitted successfully</h3>
 <br />
-<form asp-action="Index" method="get">
+<form asp-action="Index" asp-controller="User" method="get">
     <input type="hidden" asp-for="UserId" value="@Model.UserId" />
     <label><b>User Name:</b></label> <label>@Model.UserName</label>
     <input type="hidden" asp-for="UserName" value="@Model.UserName" />

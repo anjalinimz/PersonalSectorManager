@@ -1,90 +1,42 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Data.Common;
 using PersonalSectorManager.Models;
 using PersonalSectorManager.Util;
 using PersonalSectorManager.ViewModels;
 
 namespace PersonalSectorManager.Service
 {
-    public class SectorService : IProfileService
+    public class SectorService : ISectorService
     {
         private readonly ProfileDBContext _context;
         private readonly ITransformer _transformer;
 
-        public SectorService(ProfileDBContext context, ITransformer transformer)
+        public SectorService(ProfileDBContext context, ITransformer transformer, ILogger<SectorService> logger)
         {
-            _context = context;
-            _transformer = transformer;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _transformer = transformer ?? throw new ArgumentNullException(nameof(transformer));
         }
 
-        public FormViewModel RetrieveSectors()
+        public List<SectorViewModel> RetrieveSectors()
         {
-            var sectorViewModels = new List<SectorViewModel>();
-
-            var sectors = _context.Sectors.ToList();
-
-            foreach (var sector in sectors)
+            try
             {
-                SectorViewModel  sectorViewModel = _transformer.TransformToSectorViewModel(sector);
+                var sectorViewModels = new List<SectorViewModel>();
 
-                sectorViewModels.Add(sectorViewModel);
+                var sectors = _context.Sectors.ToList();
+
+                foreach (var sector in sectors)
+                {
+                    SectorViewModel sectorViewModel = _transformer.TransformToSectorViewModel(sector);
+
+                    sectorViewModels.Add(sectorViewModel);
+                }
+
+                return sectorViewModels;
+
+            } catch (DbException)
+            {
+                throw;
             }
-
-            FormViewModel formViewModel = new()
-            {
-                SectorViewModels = sectorViewModels
-            };
-
-            return formViewModel;
-        }
-
-        public int SaveUser(UserViewModel userViewModel)
-        {
-            User user = _transformer.TransformToUser(userViewModel);
-
-            var selectedSectors = _context.Sectors
-               .Where(s => userViewModel.SelectedSectorIds.Contains(s.SectorId)).ToList();  // todo handle null
-            
-            // Assuming the user is a new user, you may need to attach it to the context.
-            // If the user is an existing user, you might not need to attach.
-            if (userViewModel.UserId == 0)
-            {
-                _context.Users.Add(user);
-
-                // Save changes to generate the User's ID
-                _context.SaveChanges();
-            }
-            else
-            {
-                _context.Users.Attach(user);
-                _context.Entry(user).State = EntityState.Modified;
-
-                // Remove existing UserSectors
-                var existingSectors = _context.UserSectors.Where(us => us.UserId == user.UserId);
-                _context.UserSectors.RemoveRange(existingSectors);
-            }
-
-            // Attach and add new UserSectors
-            foreach (var sector in selectedSectors)
-            {
-                _context.Entry(sector).State = EntityState.Unchanged;
-                user.UserSectors.Add(new UserSector(user.UserId, sector.SectorId));
-            }
-            _context.SaveChanges();
-
-            return user.UserId;
-        }
-
-        public UserViewModel GetUser(int userId)
-        {
-
-            var user = _context.Users.Include(u => u.UserSectors)
-                .ThenInclude(us => us.Sector)
-                .FirstOrDefault(u => u.UserId == userId);
-
-            UserViewModel userViewModel = _transformer.TransformToUserViewModel(user);
-            // todo handle null/ errors
-
-            return userViewModel;
         }
     }
 }

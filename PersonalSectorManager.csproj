@@ -10,11 +10,13 @@
     <None Remove="Service\" />
     <None Remove="ViewModels\" />
     <None Remove="Util\" />
+    <None Remove="Views\User\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Service\" />
     <Folder Include="ViewModels\" />
     <Folder Include="Util\" />
+    <Folder Include="Views\User\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.13" />

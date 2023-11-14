@@ -3,9 +3,9 @@ using PersonalSectorManager.ViewModels;
 
 namespace PersonalSectorManager.Util
 {
-    public class ProfileDataTransformer : ITransformer
+    public class UserDataTransformer : ITransformer
 	{
-		public ProfileDataTransformer()
+		public UserDataTransformer()
 		{
 		}
 
@@ -25,7 +25,7 @@ namespace PersonalSectorManager.Util
 
         public User TransformToUser(UserViewModel userViewModel)
         {
-            var user = new User(userViewModel.UserName)
+            var user = new User(userViewModel.UserName ?? string.Empty)
             {
                 UserId = userViewModel.UserId,
                 AgreeToTerms = userViewModel.AgreeToTerms
@@ -57,7 +57,7 @@ namespace PersonalSectorManager.Util
             }
             else
             {
-                return GetItemLevel(sector.Parent) + 1;  // todo Do we need to handle null here. 
+                return GetItemLevel(sector.Parent) + 1;
             }
         }
     }

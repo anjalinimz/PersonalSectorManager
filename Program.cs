@@ -7,8 +7,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddScoped<IProfileService, SectorService>();
-builder.Services.AddScoped<ITransformer, ProfileDataTransformer>();
+builder.Services.AddScoped<ISectorService, SectorService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ITransformer, UserDataTransformer>();
 
 var configuration = builder.Configuration;
 builder.Services.AddDbContext<ProfileDBContext>(options =>
@@ -35,6 +36,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Sector}/{action=Index}/{id?}");
+    pattern: "{controller=User}/{action=Index}/{id?}");
 
 app.Run();

@@ -2,10 +2,8 @@
 
 namespace PersonalSectorManager.Service
 {
-    public interface IProfileService
-    {
-        FormViewModel RetrieveSectors();
-
+    public interface IUserService
+	{
         int SaveUser(UserViewModel userDTO);
 
         UserViewModel GetUser(int userId);

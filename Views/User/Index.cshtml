@@ -1,21 +1,15 @@
-﻿@{
-    @using PersonalSectorManager.ViewModels;
-    @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-    ViewData["Title"] = "Home Page";
+﻿@model FormViewModel
 
-}
-
-@model FormViewModel
-
-<form asp-action="Create" method="post">
+<form asp-action="Create" asp-controller="User" method="post">
     <label>Please enter your name and select the sectors you are currently involved in.</label>
+    <br />
     <br />
     <input type="hidden" asp-for="UserViewModel.UserId" value="@Model.UserViewModel.UserId" />
 
     <label>Name:</label>
     <input type="text" asp-for="UserViewModel.UserName" id="name" required>
     <span class="error-message" asp-validation-for="UserViewModel.UserName"></span>
-
+    <br />
     <label>Sectors:</label>
     <select asp-for="UserViewModel.SelectedSectorIds" id="sectorIndex" multiple size="5" required>
         @foreach (var item in Model.SectorViewModels)
@@ -25,11 +19,11 @@
     </select>
     <span asp-validation-for="UserViewModel.SelectedSectorIds"></span>
     <br />
-    <br />
     <div class="form-group">
         <input type="checkbox" asp-for="UserViewModel.AgreeToTerms" id="agreeToTerms" required>
-        <label for="agree-to-terms">Agree to terms</label>
+        <label style="display:inline-grid" for="agree-to-terms">Agree to terms</label>
         <span asp-validation-for="UserViewModel.AgreeToTerms"></span>
     </div>
+    <br />
     <input type="submit" value="Save">
 </form>

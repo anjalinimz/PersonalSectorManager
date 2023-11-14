@@ -1,10 +1,9 @@
-﻿using System;
-using PersonalSectorManager.Models;
+﻿using PersonalSectorManager.Models;
 using PersonalSectorManager.ViewModels;
 
 namespace PersonalSectorManager.Util
 {
-	public interface ITransformer
+    public interface ITransformer
 	{
         UserViewModel TransformToUserViewModel(User user);
 
