@@ -51,7 +51,7 @@ namespace PersonalSectorManager.Util
             {
                 return 0;
             }
-            else if (sector.ParentId == null)
+            if (sector.ParentId == null)
             {
                 return 0;
             }
