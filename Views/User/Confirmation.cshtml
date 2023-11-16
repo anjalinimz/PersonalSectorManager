@@ -1,18 +1,27 @@
 ﻿@model UserViewModel
 
-<h3>Profile submitted successfully</h3>
-<br />
+<!-- Form for displaying user profile information -->
 <form asp-action="Index" asp-controller="User" method="get">
+    <h3>Profile submitted successfully!</h3>
+    <br />
+
+    <!-- Hidden fields to store the UserId and UserName for form submission -->
     <input type="hidden" asp-for="UserId" value="@Model.UserId" />
     <label><b>User Name:</b></label> <label>@Model.UserName</label>
+
+    
     <input type="hidden" asp-for="UserName" value="@Model.UserName" />
     <br />
+
+    <!-- Displaying sectors and storing their values in hidden fields for form submission -->
     <label><b>Sectors:</b></label>
     @foreach (var sector in Model.Sectors)
     {
         <label>@sector.Name</label>
         <input type="hidden" asp-for="SelectedSectorIds" value="@sector.Value" />
     }
+
+    <!-- Checkbox to display and disable the AgreeToTerms property -->
     <div class="form-group">
         @if (Model.AgreeToTerms)
         {
@@ -25,9 +34,10 @@
         <label for="agree-to-terms">Agree to terms</label>
     </div>
     <br />
+
     <div class="form-group">
-         <input type="submit" value="Edit">
-         <input type="button" value="Cancel" class="btn btn-default" onclick="location.href='/'" />
-     </div>
+        <input type="submit" value="Edit">
+        <input type="button" value="Cancel" class="btn btn-default" onclick="location.href='/'" />
+    </div>
 </form>
 

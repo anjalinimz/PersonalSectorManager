@@ -1,7 +1,6 @@
 ﻿using System.Data.Common;
 using Microsoft.EntityFrameworkCore;
 using PersonalSectorManager.Models;
-using PersonalSectorManager.Util;
 using PersonalSectorManager.ViewModels;
 
 namespace PersonalSectorManager.Service
@@ -9,12 +8,12 @@ namespace PersonalSectorManager.Service
     public class UserService : IUserService
     {
         private readonly ProfileDBContext _context;
-        private readonly ITransformer _transformer;
+        private readonly ILogger<UserService> _logger;
 
-        public UserService(ProfileDBContext context, ITransformer transformer, ILogger<UserService> logger)
+        public UserService(ProfileDBContext context, ILogger<UserService> logger)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
-            _transformer = transformer ?? throw new ArgumentNullException(nameof(transformer));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public int SaveUser(UserViewModel userViewModel)
@@ -23,7 +22,11 @@ namespace PersonalSectorManager.Service
             {
                 ValidateUserViewModel(userViewModel);
 
-                User user = _transformer.TransformToUser(userViewModel);
+                var user = new User(userViewModel.UserName ?? string.Empty)
+                {
+                    UserId = userViewModel.UserId,
+                    AgreeToTerms = userViewModel.AgreeToTerms
+                };
 
                 if (userViewModel.UserId == 0)
                 {
@@ -40,12 +43,14 @@ namespace PersonalSectorManager.Service
 
                 return user.UserId;
             }
-            catch (DbException)
+            catch (DbException ex)
             {
+                _logger.LogError($"Error occurred while performing DB operations: {ex.Message}");
                 throw;
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                _logger.LogError($"An unexpected error occurred: {e.Message}");
                 throw;
             }
         }
@@ -58,10 +63,18 @@ namespace PersonalSectorManager.Service
 
             if (user == null)
             {
+                _logger.LogError($"User with ID {userId} not found.");
                 throw new ArgumentNullException(nameof(user));
             }
 
-            UserViewModel userViewModel = _transformer.TransformToUserViewModel(user);
+            var userViewModel = new UserViewModel()
+            {
+                UserId = user.UserId,
+                UserName = user.UserName,
+                AgreeToTerms = user.AgreeToTerms,
+                Sectors = user?.UserSectors?.Select(u => new SectorViewModel(u.Sector.SectorId, u.Sector.Name)).ToList()
+            };
+
 
             return userViewModel;
         }
@@ -80,12 +93,13 @@ namespace PersonalSectorManager.Service
             _context.SaveChanges();
         }
 
-        private static void ValidateSelectedSectors(UserViewModel userViewModel)
+        private void ValidateSelectedSectors(UserViewModel userViewModel)
         {
             if (userViewModel.SelectedSectorIds == null || !userViewModel.SelectedSectorIds.Any())
             {
-                throw new ArgumentNullException(nameof(userViewModel.SelectedSectorIds),
-                    "At least one sector should be selected.");
+                string errorMessage = "At least one sector should be selected.";
+                _logger.LogError($"{nameof(userViewModel.SelectedSectorIds)} validation failed: {errorMessage}");
+                throw new ArgumentNullException(nameof(userViewModel.SelectedSectorIds), errorMessage);
             }
         }
 
@@ -107,10 +121,11 @@ namespace PersonalSectorManager.Service
             _context.SaveChanges();
         }
 
-        private static void ValidateUserViewModel(UserViewModel userViewModel)
+        private void ValidateUserViewModel(UserViewModel userViewModel)
         {
             if (userViewModel == null)
             {
+                _logger.LogError($"{nameof(userViewModel)} should not be null");
                 throw new ArgumentNullException(nameof(userViewModel));
             }
         }

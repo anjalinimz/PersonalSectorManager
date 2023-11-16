@@ -4,26 +4,35 @@
     <label>Please enter your name and select the sectors you are currently involved in.</label>
     <br />
     <br />
+
+    <!-- Hidden field for UserId -->
     <input type="hidden" asp-for="UserViewModel.UserId" value="@Model.UserViewModel.UserId" />
 
+    <!-- Label and input for user's name -->
     <label>Name:</label>
-    <input type="text" asp-for="UserViewModel.UserName" id="name" required>
+    <input type="text" asp-for="UserViewModel.UserName" id="name">
     <span class="error-message" asp-validation-for="UserViewModel.UserName"></span>
     <br />
+
+    <!-- Label and multi-select dropdown for sectors -->
     <label>Sectors:</label>
-    <select asp-for="UserViewModel.SelectedSectorIds" id="sectorIndex" multiple size="5" required>
+    <select asp-for="UserViewModel.SelectedSectorIds" id="sectorIndex" multiple size="5">
         @foreach (var item in Model.SectorViewModels)
         {
             <option disabled="@item.Disabled" value="@item.Value" style="margin-left: calc(@item.Level * 15px);">@item.Name</option>
         }
     </select>
-    <span asp-validation-for="UserViewModel.SelectedSectorIds"></span>
+    <span class="error-message" asp-validation-for="UserViewModel.SelectedSectorIds"></span>
     <br />
+
+    <!-- Checkbox for agreeing to terms -->
     <div class="form-group">
-        <input type="checkbox" asp-for="UserViewModel.AgreeToTerms" id="agreeToTerms" required>
+        <input type="checkbox" asp-for="UserViewModel.AgreeToTerms" id="agreeToTerms">
         <label style="display:inline-grid" for="agree-to-terms">Agree to terms</label>
-        <span asp-validation-for="UserViewModel.AgreeToTerms"></span>
+        <span class="error-message" asp-validation-for="UserViewModel.AgreeToTerms"></span>
     </div>
     <br />
+
+    <!-- Submit button -->
     <input type="submit" value="Save">
 </form>

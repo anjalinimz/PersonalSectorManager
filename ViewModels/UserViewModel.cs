@@ -2,6 +2,7 @@
 
 namespace PersonalSectorManager.ViewModels
 {
+    // Represents the view model for user data, including input validation attributes.
     public class UserViewModel
 	{
 		public int UserId { get; set; }
@@ -11,10 +12,10 @@ namespace PersonalSectorManager.ViewModels
         [RegularExpression("^[a-zA-Z' -]+$", ErrorMessage = "Invalid characters. Only letters, spaces, hyphens, and apostrophes are allowed.")]
         public string? UserName { get; set; }
 
-        [Required(ErrorMessage = "At least One sector should be selected")]
+        [AtLeastOneItem(ErrorMessage = "At least one sector should be selected")]
         public List<int>? SelectedSectorIds { get; set; }
 
-        [Required(ErrorMessage = "You must agreed to our terms before proceeding")]
+        [Range(typeof(bool), "true", "true", ErrorMessage = "Agree to terms is required.")]
         public bool AgreeToTerms { get; set; }
 
 		public List<SectorViewModel>? Sectors { get; set; }

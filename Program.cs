@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using PersonalSectorManager.Models;
 using PersonalSectorManager.Service;
-using PersonalSectorManager.Util;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +8,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<ISectorService, SectorService>();
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<ITransformer, UserDataTransformer>();
 
 var configuration = builder.Configuration;
 builder.Services.AddDbContext<ProfileDBContext>(options =>

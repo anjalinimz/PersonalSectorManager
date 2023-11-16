@@ -1,5 +1,6 @@
 ﻿namespace PersonalSectorManager.ViewModels
 {
+    // Providing information for sector options.
     public class SectorViewModel
 	{
         public int Value { get; set; }

@@ -7,23 +7,24 @@ namespace PersonalSectorManager.Controllers
 {
     public class UserController : Controller
     {
+
         private readonly ILogger<UserController> _logger;
         private readonly IUserService _userService;
         private readonly ISectorService _sectorService;
 
         public UserController(ILogger<UserController> logger, IUserService userService, ISectorService sectorService)
-		{
+        {
             _logger = logger;
             _userService = userService;
             _sectorService = sectorService;
-
         }
 
+        // Action to display user input form
         public IActionResult Index(UserViewModel userViewModel)
         {
             try
             {
-                var sectorViewModels = _sectorService.RetrieveSectors();
+                var sectorViewModels = _sectorService.RetrieveHierarchicalSectors();
 
                 FormViewModel formViewModel = new()
                 {
@@ -40,6 +41,7 @@ namespace PersonalSectorManager.Controllers
             }
         }
 
+        // Action to handle form submission and user creation
         [HttpPost]
         public IActionResult Create(FormViewModel formViewModel)
         {
@@ -52,7 +54,7 @@ namespace PersonalSectorManager.Controllers
                 }
                 else
                 {
-                    formViewModel.SectorViewModels = _sectorService.RetrieveSectors();
+                    formViewModel.SectorViewModels = _sectorService.RetrieveHierarchicalSectors();
                     return View("Index", formViewModel);
                 }
             }
@@ -73,6 +75,7 @@ namespace PersonalSectorManager.Controllers
             }
         }
 
+        // Action to display user confirmation page
         public IActionResult Confirmation(int userId)
         {
             try
@@ -89,5 +92,3 @@ namespace PersonalSectorManager.Controllers
         }
     }
 }
-
-  

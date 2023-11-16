@@ -5,6 +5,8 @@ VisualStudioVersion = 17.7.34221.43
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersonalSectorManager", "PersonalSectorManager.csproj", "{214C0E38-0E47-4361-AE4D-A9705FBACEC9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersonalSectorManager.Tests", "..\PersonalSectorManager.Tests\PersonalSectorManager.Tests.csproj", "{58BA6DDF-831F-4D09-950E-FB8269B9707B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{214C0E38-0E47-4361-AE4D-A9705FBACEC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{214C0E38-0E47-4361-AE4D-A9705FBACEC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{214C0E38-0E47-4361-AE4D-A9705FBACEC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58BA6DDF-831F-4D09-950E-FB8269B9707B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58BA6DDF-831F-4D09-950E-FB8269B9707B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58BA6DDF-831F-4D09-950E-FB8269B9707B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58BA6DDF-831F-4D09-950E-FB8269B9707B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

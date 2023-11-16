@@ -1,6 +1,5 @@
 ﻿using System.Data.Common;
 using PersonalSectorManager.Models;
-using PersonalSectorManager.Util;
 using PersonalSectorManager.ViewModels;
 
 namespace PersonalSectorManager.Service
@@ -8,15 +7,15 @@ namespace PersonalSectorManager.Service
     public class SectorService : ISectorService
     {
         private readonly ProfileDBContext _context;
-        private readonly ITransformer _transformer;
+        private readonly ILogger<SectorService> _logger;
 
-        public SectorService(ProfileDBContext context, ITransformer transformer)
+        public SectorService(ProfileDBContext context, ILogger<SectorService> logger)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
-            _transformer = transformer ?? throw new ArgumentNullException(nameof(transformer));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public List<SectorViewModel> RetrieveSectors()
+        public List<SectorViewModel> RetrieveHierarchicalSectors()
         {
             try
             {
@@ -25,22 +24,17 @@ namespace PersonalSectorManager.Service
                 var sectors = _context.Sectors.ToList();
                 var hierarchicalSectors = BuildHierarchicalList(sectors);
 
-                foreach (var sector in hierarchicalSectors)
-                {
-                    SectorViewModel sectorViewModel = _transformer.TransformToSectorViewModel(sector);
+                return hierarchicalSectors;
 
-                    sectorViewModels.Add(sectorViewModel);
-                }
-
-                return sectorViewModels;
-
-            } catch (DbException)
+            }
+            catch (DbException ex)
             {
+                _logger.LogError($"Error occurred while performing DB operations: {ex.Message}");
                 throw;
             }
         }
 
-        private List<Sector> BuildHierarchicalList(List<Sector> sectors)
+        private List<SectorViewModel> BuildHierarchicalList(List<Sector> sectors)
         {
             var hierarchy = new Dictionary<int, List<Sector>>();
 
@@ -54,21 +48,28 @@ namespace PersonalSectorManager.Service
                 hierarchy[sector.ParentId ?? 0].Add(sector);
             }
 
-            var hierarchicalList = new List<Sector>();
-            AddSectorsToList(hierarchy[0], hierarchicalList, hierarchy);
+            var hierarchicalList = new List<SectorViewModel>();
+            AddSectorsToList(hierarchy[0], hierarchicalList, hierarchy, 0);
 
             return hierarchicalList;
         }
 
-        private void AddSectorsToList(List<Sector> sectors, List<Sector> hierarchicalList, Dictionary<int, List<Sector>> hierarchy)
+        private void AddSectorsToList(List<Sector> sectors, List<SectorViewModel> hierarchicalList,
+            Dictionary<int, List<Sector>> hierarchy, int level)
         {
             foreach (var sector in sectors)
             {
-                hierarchicalList.Add(sector);
+                var sectorViewModel = new SectorViewModel(sector.SectorId, sector.Name)
+                {
+                    Level = level,
+                    Disabled = hierarchy.ContainsKey(sector.SectorId)
+                };
+
+                hierarchicalList.Add(sectorViewModel);
 
                 if (hierarchy.ContainsKey(sector.SectorId))
                 {
-                    AddSectorsToList(hierarchy[sector.SectorId], hierarchicalList, hierarchy);
+                    AddSectorsToList(hierarchy[sector.SectorId], hierarchicalList, hierarchy, level + 1);
                 }
             }
         }

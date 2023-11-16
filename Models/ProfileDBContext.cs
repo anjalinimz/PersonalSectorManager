@@ -4,6 +4,7 @@ namespace PersonalSectorManager.Models
 {
     public class ProfileDBContext : DbContext
     {
+
         public ProfileDBContext(DbContextOptions<ProfileDBContext> options) : base(options)
         {
         }
