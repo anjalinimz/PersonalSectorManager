@@ -45,9 +45,10 @@ This repository contains the solution for the test task provided by Helmes. The 
 
 Navigate to your desired folder and run the following commands using a terminal.
 
-```bash
+```
 git clone https://github.com/anjalinimz/PersonalSectorManager.git
 git clone https://github.com/anjalinimz/PersonalSectorManager.Tests.git
+```
 
 If you've cloned both the main project and the test project repositories into the same folder, Visual Studio should automatically recognize them as part of the same solution. In this case, you can open the solution file directly.
 
