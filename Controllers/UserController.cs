@@ -14,9 +14,9 @@ namespace PersonalSectorManager.Controllers
 
         public UserController(ILogger<UserController> logger, IUserService userService, ISectorService sectorService)
         {
-            _logger = logger;
-            _userService = userService;
-            _sectorService = sectorService;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _userService = userService ?? throw new ArgumentNullException(nameof(userService));
+            _sectorService = sectorService ?? throw new ArgumentNullException(nameof(sectorService));
         }
 
         // Action to display user input form

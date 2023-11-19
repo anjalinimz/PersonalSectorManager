@@ -19,8 +19,6 @@ namespace PersonalSectorManager.Service
         {
             try
             {
-                var sectorViewModels = new List<SectorViewModel>();
-
                 var sectors = _context.Sectors.ToList();
                 var hierarchicalSectors = BuildHierarchicalList(sectors);
 
@@ -62,7 +60,7 @@ namespace PersonalSectorManager.Service
                 var sectorViewModel = new SectorViewModel(sector.SectorId, sector.Name)
                 {
                     Level = level,
-                    Disabled = hierarchy.ContainsKey(sector.SectorId)
+                    Disabled = hierarchy.ContainsKey(sector.SectorId) && hierarchy[sector.SectorId].Any()
                 };
 
                 hierarchicalList.Add(sectorViewModel);
