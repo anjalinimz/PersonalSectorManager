@@ -18,7 +18,7 @@ This application is designed to oversee and manage user sector information.
 
 ## Overview
 
-This repository contains the solution for the test task provided by Helmes. The task involved correcting deficiencies in the index.html file, implementing functionality to manage and display "Sectors" from a database, validating and storing user input data, and enabling users to edit their data during the session.
+The involved correcting deficiencies in the index.html file in the wwwroot folder, implementing functionality to manage and display "Sectors" from a database, validating and storing user input data, and enabling users to edit their data during the session.
 
 
 ## Tasks Completed
